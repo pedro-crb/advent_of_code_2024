@@ -1,3 +1,5 @@
+import copy
+
 blocking_map: dict[int, set[int]] = {}
 
 with open('day5/input.txt', 'r') as file:
@@ -14,7 +16,7 @@ while True:
         blocking_map[nums[1]] = set()
     blocking_map[nums[1]] |= set([nums[0]])
 
-mid_sum = 0
+unordered = []
 while i < len(file_lines):
     line = file_lines[i]
     i += 1
@@ -30,7 +32,27 @@ while i < len(file_lines):
             break
         blocked_numbers |= blocking_map[num]
         
-    if is_safe:
-        mid_sum += nums[len(nums)//2]
+    if not is_safe:
+        unordered.append(nums)
         
-print(mid_sum)       
+mid_sum = 0
+for nums in unordered:
+    final_list = []
+    nums_set = set(nums)
+    success_flag = True
+    
+    while success_flag:
+        nums = copy.deepcopy(nums_set)
+        if len(nums) == 0:
+            break
+        
+        success_flag = False
+        for num in nums:
+            if len(nums_set & blocking_map[num]) == 0:
+                final_list.append(num)
+                nums_set.remove(num)
+                success_flag = True
+
+    mid_sum += final_list[len(final_list)//2]
+    
+print(mid_sum)

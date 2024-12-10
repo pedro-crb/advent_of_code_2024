@@ -1,7 +1,5 @@
 import re
-import time
 
-t0 = time.perf_counter()
 final_sum = 0
 with open('day7/input.txt', 'r') as file:
     for line in file:
